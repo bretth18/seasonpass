@@ -1,6 +1,11 @@
-import { task } from 'hardhat/config';
-import { HardhatUserConfig } from 'hardhat/config';
+import { task, HardhatUserConfig } from 'hardhat/config';
 import '@nomiclabs/hardhat-waffle';
+import '@typechain/hardhat';
+import 'hardhat-deploy';
+import 'hardhat-abi-exporter';
+import 'hardhat-gas-reporter';
+import 'hardhat-spdx-license-identifier';
+import 'tsconfig-paths/register';
 
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -17,10 +22,25 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 
 
+// MARK
+// load .env
+
+
 
 
 const config: HardhatUserConfig = {
   solidity: '0.8.4',
+
+  abiExporter: {
+    path: './data/abi',
+    clear: true,
+    spacing: 2,
+  },
+
+  spdxLicenseIdentifier: {
+    overwrite: false,
+    runOnCompile: true,
+  },
 };
 
 export default config;

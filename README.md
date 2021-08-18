@@ -22,14 +22,17 @@ yarn install
 3. create a ```.env``` file in your root directory. an example is located at [.env-example](.env-example)
 
 
+
 ## usage
 ```bash
 npx hardhat 
 ```
 
 
+
 ## roadmap
 TODO
+
 
 
 ## contributing
@@ -37,6 +40,7 @@ TODO
 pull requests are welcome. for major changes, please open an issue first to discuss what you would like to change.
 
 please make sure to update tests as appropriate.
+
 
 
 ## license

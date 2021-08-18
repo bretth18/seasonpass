@@ -1,4 +1,6 @@
-const { expect } = require("chai");
+import { ethers } from 'hardhat';
+import { Signer } from 'ethers';
+import { expect } from 'chai';
 
 describe("Greeter", function () {
   it("Should return the new greeting once it's changed", async function () {

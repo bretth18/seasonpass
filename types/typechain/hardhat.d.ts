@@ -77,6 +77,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
     getContractFactory(
+      name: "ERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721__factory>;
+    getContractFactory(
+      name: "ISeasonPass",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISeasonPass__factory>;
+    getContractFactory(
       name: "SeasonPassController",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SeasonPassController__factory>;

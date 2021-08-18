@@ -68,12 +68,6 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "string",
-        "name": "metadataURI",
-        "type": "string"
       }
     ],
     "name": "SeasonPassMinted",
@@ -93,12 +87,6 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "string",
-        "name": "metadataURI",
-        "type": "string"
       }
     ],
     "name": "SeasonPassRevoked",
@@ -250,7 +238,13 @@
       }
     ],
     "name": "safeMint",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },

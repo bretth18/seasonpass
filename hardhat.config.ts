@@ -38,6 +38,7 @@ const networks: NetworksUserConfig = process.env.TEST
     forking: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
       enabled: true,
+      blockNumber: 13046743,
     },
     saveDeployments: true,
   },

@@ -139,8 +139,8 @@ interface SeasonPassInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "SeasonPassMinted(address,uint256,string)": EventFragment;
-    "SeasonPassRevoked(address,uint256,string)": EventFragment;
+    "SeasonPassMinted(address,uint256)": EventFragment;
+    "SeasonPassRevoked(address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -382,7 +382,7 @@ export class SeasonPass extends BaseContract {
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    safeMint(to: string, overrides?: CallOverrides): Promise<void>;
+    safeMint(to: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -456,20 +456,18 @@ export class SeasonPass extends BaseContract {
 
     SeasonPassMinted(
       member?: string | null,
-      tokenId?: BigNumberish | null,
-      metadataURI?: string | null
+      tokenId?: BigNumberish | null
     ): TypedEventFilter<
-      [string, BigNumber, string],
-      { member: string; tokenId: BigNumber; metadataURI: string }
+      [string, BigNumber],
+      { member: string; tokenId: BigNumber }
     >;
 
     SeasonPassRevoked(
       member?: string | null,
-      tokenId?: BigNumberish | null,
-      metadataURI?: string | null
+      tokenId?: BigNumberish | null
     ): TypedEventFilter<
-      [string, BigNumber, string],
-      { member: string; tokenId: BigNumber; metadataURI: string }
+      [string, BigNumber],
+      { member: string; tokenId: BigNumber }
     >;
 
     Transfer(

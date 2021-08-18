@@ -11,6 +11,7 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
+  Overrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -18,19 +19,19 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface ERC721Interface extends ethers.utils.Interface {
+interface ISeasonPassInterface extends ethers.utils.Interface {
   functions: {
-    "balanceOf(address)": FunctionFragment;
+    "safeMint(address)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(functionFragment: "safeMint", values: [string]): string;
 
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "safeMint", data: BytesLike): Result;
 
   events: {};
 }
 
-export class ERC721 extends BaseContract {
+export class ISeasonPass extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -71,28 +72,37 @@ export class ERC721 extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: ERC721Interface;
+  interface: ISeasonPassInterface;
 
   functions: {
-    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    safeMint(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
-  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+  safeMint(
+    to: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
-    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+    safeMint(to: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
 
   estimateGas: {
-    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+    safeMint(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    balanceOf(
-      owner: string,
-      overrides?: CallOverrides
+    safeMint(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

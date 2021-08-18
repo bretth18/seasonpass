@@ -17,6 +17,7 @@ export type { ERC165 } from "./ERC165";
 export type { IERC165 } from "./IERC165";
 export type { SeasonPass } from "./SeasonPass";
 export type { ERC20 } from "./ERC20";
+export type { ISeasonPass } from "./ISeasonPass";
 export type { SeasonPassController } from "./SeasonPassController";
 
 export { AccessControl__factory } from "./factories/AccessControl__factory";
@@ -35,4 +36,5 @@ export { ERC165__factory } from "./factories/ERC165__factory";
 export { IERC165__factory } from "./factories/IERC165__factory";
 export { SeasonPass__factory } from "./factories/SeasonPass__factory";
 export { ERC20__factory } from "./factories/ERC20__factory";
+export { ISeasonPass__factory } from "./factories/ISeasonPass__factory";
 export { SeasonPassController__factory } from "./factories/SeasonPassController__factory";

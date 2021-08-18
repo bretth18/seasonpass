@@ -11,6 +11,7 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
+  Overrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -20,20 +21,154 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface SeasonPassControllerInterface extends ethers.utils.Interface {
   functions: {
-    "checkTokenGate(address,address,uint256)": FunctionFragment;
+    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
+    "OWNER_ROLE()": FunctionFragment;
+    "claim()": FunctionFragment;
+    "getRoleAdmin(bytes32)": FunctionFragment;
+    "getTokenAddress()": FunctionFragment;
+    "getTokenGate()": FunctionFragment;
+    "grantRole(bytes32,address)": FunctionFragment;
+    "hasRole(bytes32,address)": FunctionFragment;
+    "renounceRole(bytes32,address)": FunctionFragment;
+    "revokeRole(bytes32,address)": FunctionFragment;
+    "seasonPassAddress()": FunctionFragment;
+    "setSeasonPass(address)": FunctionFragment;
+    "setTokenAddress(address)": FunctionFragment;
+    "setTokenGate(uint256)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "tokenAddress()": FunctionFragment;
+    "tokenGate()": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "checkTokenGate",
-    values: [string, string, BigNumberish]
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "OWNER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTokenAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTokenGate",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "grantRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "seasonPassAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSeasonPass",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setTokenAddress",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setTokenGate",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "tokenGate", values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: "checkTokenGate",
+    functionFragment: "DEFAULT_ADMIN_ROLE",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "OWNER_ROLE", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTokenAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTokenGate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceRole",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "seasonPassAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSeasonPass",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTokenAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTokenGate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "tokenGate", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
+    "RoleGranted(bytes32,address,address)": EventFragment;
+    "RoleRevoked(bytes32,address,address)": EventFragment;
+    "tokenAddressUpdated(address,address)": EventFragment;
+    "tokenClaimed(address,uint256,uint256)": EventFragment;
+    "tokenGateUpdated(address,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "tokenAddressUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "tokenClaimed"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "tokenGateUpdated"): EventFragment;
 }
 
 export class SeasonPassController extends BaseContract {
@@ -80,47 +215,390 @@ export class SeasonPassController extends BaseContract {
   interface: SeasonPassControllerInterface;
 
   functions: {
-    checkTokenGate(
-      _tokenAddress: string,
-      _memberAddress: string,
-      _gateAmount: BigNumberish,
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    OWNER_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
+
+    getTokenAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    getTokenGate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    seasonPassAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    setSeasonPass(
+      _seasonPassAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setTokenAddress(
+      _tokenAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setTokenGate(
+      _tokenGate: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    tokenAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    tokenGate(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
-  checkTokenGate(
-    _tokenAddress: string,
-    _memberAddress: string,
-    _gateAmount: BigNumberish,
+  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  OWNER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  claim(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+
+  getTokenAddress(overrides?: CallOverrides): Promise<string>;
+
+  getTokenGate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  grantRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  hasRole(
+    role: BytesLike,
+    account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  renounceRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  revokeRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  seasonPassAddress(overrides?: CallOverrides): Promise<string>;
+
+  setSeasonPass(
+    _seasonPassAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setTokenAddress(
+    _tokenAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setTokenGate(
+    _tokenGate: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supportsInterface(
+    interfaceId: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  tokenAddress(overrides?: CallOverrides): Promise<string>;
+
+  tokenGate(overrides?: CallOverrides): Promise<BigNumber>;
+
   callStatic: {
-    checkTokenGate(
-      _tokenAddress: string,
-      _memberAddress: string,
-      _gateAmount: BigNumberish,
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    OWNER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    claim(overrides?: CallOverrides): Promise<void>;
+
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+
+    getTokenAddress(overrides?: CallOverrides): Promise<string>;
+
+    getTokenGate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    seasonPassAddress(overrides?: CallOverrides): Promise<string>;
+
+    setSeasonPass(
+      _seasonPassAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setTokenAddress(
+      _tokenAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setTokenGate(
+      _tokenGate: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    tokenAddress(overrides?: CallOverrides): Promise<string>;
+
+    tokenGate(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
-  filters: {};
+  filters: {
+    RoleAdminChanged(
+      role?: BytesLike | null,
+      previousAdminRole?: BytesLike | null,
+      newAdminRole?: BytesLike | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; previousAdminRole: string; newAdminRole: string }
+    >;
+
+    RoleGranted(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; account: string; sender: string }
+    >;
+
+    RoleRevoked(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; account: string; sender: string }
+    >;
+
+    tokenAddressUpdated(
+      from?: string | null,
+      tokenAddress?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { from: string; tokenAddress: string }
+    >;
+
+    tokenClaimed(
+      from?: string | null,
+      tokenId?: null,
+      tokenBalance?: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber],
+      { from: string; tokenId: BigNumber; tokenBalance: BigNumber }
+    >;
+
+    tokenGateUpdated(
+      from?: string | null,
+      tokenGate?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { from: string; tokenGate: BigNumber }
+    >;
+  };
 
   estimateGas: {
-    checkTokenGate(
-      _tokenAddress: string,
-      _memberAddress: string,
-      _gateAmount: BigNumberish,
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    OWNER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    getRoleAdmin(
+      role: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTokenGate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    seasonPassAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setSeasonPass(
+      _seasonPassAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setTokenAddress(
+      _tokenAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setTokenGate(
+      _tokenGate: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    tokenGate(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    checkTokenGate(
-      _tokenAddress: string,
-      _memberAddress: string,
-      _gateAmount: BigNumberish,
+    DEFAULT_ADMIN_ROLE(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    OWNER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getRoleAdmin(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTokenAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTokenGate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    seasonPassAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setSeasonPass(
+      _seasonPassAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTokenAddress(
+      _tokenAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTokenGate(
+      _tokenGate: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    tokenGate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

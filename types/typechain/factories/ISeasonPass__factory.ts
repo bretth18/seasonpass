@@ -4,18 +4,18 @@
 
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-import type { ERC721, ERC721Interface } from "../ERC721";
+import type { ISeasonPass, ISeasonPassInterface } from "../ISeasonPass";
 
 const _abi = [
   {
     inputs: [
       {
         internalType: "address",
-        name: "owner",
+        name: "to",
         type: "address",
       },
     ],
-    name: "balanceOf",
+    name: "safeMint",
     outputs: [
       {
         internalType: "uint256",
@@ -23,17 +23,20 @@ const _abi = [
         type: "uint256",
       },
     ],
-    stateMutability: "view",
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
 
-export class ERC721__factory {
+export class ISeasonPass__factory {
   static readonly abi = _abi;
-  static createInterface(): ERC721Interface {
-    return new utils.Interface(_abi) as ERC721Interface;
+  static createInterface(): ISeasonPassInterface {
+    return new utils.Interface(_abi) as ISeasonPassInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): ERC721 {
-    return new Contract(address, _abi, signerOrProvider) as ERC721;
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): ISeasonPass {
+    return new Contract(address, _abi, signerOrProvider) as ISeasonPass;
   }
 }

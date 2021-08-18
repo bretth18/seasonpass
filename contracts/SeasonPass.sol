@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "./SeasonPassController.sol";
 
 
 /**
@@ -43,14 +42,12 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     event SeasonPassMinted(
         address indexed member,
-        uint256 indexed tokenId,
-        string indexed metadataURI
+        uint256 indexed tokenId
     );
 
     event SeasonPassRevoked(
         address indexed member,
-        uint256 indexed tokenId,
-        string indexed metadataURI
+        uint256 indexed tokenId
     );
 
 
@@ -63,12 +60,25 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
     /// @notice Mints a new SeasonPass token to an adddress and increments the total tokenId count.
     /// @dev    safeMint is used to ensure tokenId does not exist and the receiver has implemented onERC721Received.
     /// @param  to The address of the receipient of the token.
-    function safeMint(address to) public {
-        // TODO: implement checks ensure gate amount before transfer/mint
+    function safeMint(address to) external  returns (uint256) {
 
-        // call safemint
+        uint256 currentTokenId = _tokenIdCounter.current();
+
+        /// call safemint
         _safeMint(to, _tokenIdCounter.current());
+
+        /// update the tokens metadata
+        // _setTokenURI(_tokenIdCounter.current(), metadataURI);
+    
+
+        /// Emit event
+        emit SeasonPassMinted(to, _tokenIdCounter.current());
+
+        /// Increment
         _tokenIdCounter.increment();
+
+        return currentTokenId;
+
     }
 
 

@@ -19,6 +19,8 @@ cd seasonpass
 ```bash
 yarn install
 ```
+3. create a ```.env``` file in your root directory. an example is located at [.env-example](.env-example)
+
 
 ## usage
 ```bash

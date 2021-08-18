@@ -1,4 +1,6 @@
-import { task, HardhatUserConfig } from 'hardhat/config';
+import { task } from 'hardhat/config';
+import { HardhatUserConfig, NetworksUserConfig } from 'hardhat/types';
+import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
 import 'hardhat-deploy';
@@ -6,7 +8,7 @@ import 'hardhat-abi-exporter';
 import 'hardhat-gas-reporter';
 import 'hardhat-spdx-license-identifier';
 import 'tsconfig-paths/register';
-
+import { accounts } from './utils/accounts';
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -18,18 +20,58 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
 
 
-// MARK
 // load .env
+const PRIVATE_KEY = process.env['PRIVATE_KEY'];
+const INFURA_KEY = process.env['INFURA_KEY'];
+const ALCHEMY_KEY = process.env['ALCHEMY_KEY'];
 
 
+// Networks config
+const networks: NetworksUserConfig = process.env.TEST
+? {}
+: {
+
+  hardhat: {
+    loggingEnabled: true,
+    forking: {
+      url: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
+      enabled: true,
+    },
+    saveDeployments: true,
+  },
+
+  rinkeby: {
+    url: `https://rinkeby.infura.io/v3/${INFURA_KEY}`,
+    accounts: [accounts()],
+  },
+
+};
 
 
 const config: HardhatUserConfig = {
   solidity: '0.8.4',
+
+
+  networks,
+  namedAccounts: {
+    deployer: 0,
+    tokenOwner: 1,
+  },
+
+  paths: {
+    artifacts: './data/artifacts',
+    deployments: './data/deployments',
+  },
+
+  typechain: {
+    outDir: './types/typechain',
+  },
+
+  mocha: {
+    timeout: 20000,
+  },
 
   abiExporter: {
     path: './data/abi',
@@ -41,6 +83,7 @@ const config: HardhatUserConfig = {
     overwrite: false,
     runOnCompile: true,
   },
+
 };
 
 export default config;

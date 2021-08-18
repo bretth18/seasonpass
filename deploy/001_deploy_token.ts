@@ -14,10 +14,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     // Fetch accounts
     const { deployer, tokenOwner } = await getNamedAccounts();
 
-    // Create a deployment named 'Brot'. By default it looks for an artifact with the same name
-    await deploy('Brot', {
+    // Create a deployment named 'SeasonPass'. By default it looks for an artifact with the same name
+    await deploy('SeasonPass', {
         from: deployer,
-        contract: 'Brot',
+        contract: 'SeasonPass',
         args: [],
         log: true,          // Displays address and gas used in console
     });
@@ -25,4 +25,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 export default func;
 
-func.tags = ['Brot'];       // Setup tag for option to execute script on its own
+func.tags = ['SeasonPass'];       // Setup tag for option to execute script on its own

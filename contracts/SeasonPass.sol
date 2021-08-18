@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.2;
 
+
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
@@ -25,13 +26,16 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 @author      : @ bretth18 / @ computerdata
 @title       : "seasonpass"
 
+@dev         : standard nft implementation using openzeppelin libs
+               must be modified for access control. 
+               we want our controller to be in full control?
 
  */
 
 
-
 contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
+    /// Counters library is used for safe enumeration
     using Counters for Counters.Counter;
 
     /// Private variable for tracking tokenIds
@@ -52,14 +56,18 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
 
     /// Constructor
+
     constructor() ERC721("SeasonPass", "SP00"){
 
     }
 
 
-    /// @notice Mints a new SeasonPass token to an adddress and increments the total tokenId count.
-    /// @dev    safeMint is used to ensure tokenId does not exist and the receiver has implemented onERC721Received.
-    /// @param  to The address of the receipient of the token.
+    /* 
+        @notice Mints a new SeasonPass token to an adddress and increments the total tokenId count.
+        @dev    safeMint is used to ensure tokenId does not exist 
+                and the receiver has implemented onERC721Received.
+        @param  to The address of the receipient of the token.
+    **/
     function safeMint(address to) external  returns (uint256) {
 
         uint256 currentTokenId = _tokenIdCounter.current();
@@ -83,11 +91,14 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
 
 
+
     // Override Functions
 
-    /// @notice Returns string containing the baseURI for each token
-    /// @dev    ipfs:// is used to resolve w/ standard ipfs dns methods
-    /// @return string containing "ipfs://"
+    /*
+        @notice Returns string containing the baseURI for each token
+        @dev    ipfs:// is used to resolve w/ standard ipfs dns methods
+        @return string containing "ipfs://"
+    **/
     function _baseURI() internal pure override returns (string memory) {
         return "ipfs://";
     }
@@ -111,8 +122,6 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
     function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
-
-
 
      
  }

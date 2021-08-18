@@ -3,13 +3,33 @@
 pragma solidity ^0.8.2;
 
 
-
-
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+
+/**
+
+                                                    _____             _             _ _           
+                                                   /  __ \           | |           | | |          
+ ___  ___  __ _ ___  ___  _ __  _ __   __ _ ___ ___| /  \/ ___  _ __ | |_ _ __ ___ | | | ___ _ __ 
+/ __|/ _ \/ _` / __|/ _ \| '_ \| '_ \ / _` / __/ __| |    / _ \| '_ \| __| '__/ _ \| | |/ _ \ '__|
+\__ \  __/ (_| \__ \ (_) | | | | |_) | (_| \__ \__ \ \__/\ (_) | | | | |_| | | (_) | | |  __/ |   
+|___/\___|\__,_|___/\___/|_| |_| .__/ \__,_|___/___/\____/\___/|_| |_|\__|_|  \___/|_|_|\___|_|   
+                               | |                                                                
+                               |_|                                                                
+                        
+-------------------------------------------------------------------------------------------------
+"seasonpassController"  :   Access Control mechanism contract for managing 
+                            the "SeasonPass" ERC-721 contract.
+
+@author                 :   @ bretth18 / @ computerdata
+@title                  :   "seasonpassController"
+
+@dev                    :   This contract implements openzeppelin's AcccessControl for easy and secure
+                            management of permission roles. 
+ */
 
 
 interface ERC20 {
@@ -36,10 +56,8 @@ contract SeasonPassController is AccessControl {
 
     /// Public variables
     address public seasonPassAddress;
-
     address public tokenAddress;  
     uint256 public tokenGate;
-
 
 
     /// Events
@@ -50,6 +68,16 @@ contract SeasonPassController is AccessControl {
 
 
     /// Constructor
+    /**
+        @notice constructor sets owner permission on deployment 
+                and sets child contract and token gate amount
+        @dev    not sure about accesscontrol yet? is this the 
+                best solution?
+        @param  owner           The DAO multisig address to 
+                                control the contract
+        @param  _tokenAddress   ERC-20 contract used for tokengate
+    
+     */
     constructor(address owner, address _tokenAddress, uint256 _tokenGate) {
         /// Grant the OWNER_ROLE to the input account (DAO Multisig goes here!)
         _setupRole(OWNER_ROLE, owner);
@@ -61,14 +89,13 @@ contract SeasonPassController is AccessControl {
 
 
 
-    function getTokenAddress() public view returns (address) {
-        return tokenAddress;
-    }
 
-    function getTokenGate() public view returns (uint256) {
-        return tokenGate;
-    }
-
+    /**
+        @notice setter function for updating the token gate ERC-20 contract address
+        @dev    function is public but accesscontrol restricted to owner
+        @param  _tokenAddress   input param for ERC-20 contract address
+    
+     */
     function setTokenAddress(address _tokenAddress) public {
         /// Assertion to check that only the contract owner role is allowed to update
         require(hasRole(OWNER_ROLE, msg.sender), "Caller does not have permission! uh oh stinky");
@@ -80,6 +107,14 @@ contract SeasonPassController is AccessControl {
         emit tokenAddressUpdated(msg.sender, _tokenAddress);
     }
 
+
+    /**
+        @notice setter function for updating token gate amount (numerical value)
+        @param  _tokenGate  uint256 value for token gate amount (e.g '55')
+        @dev    maybe should be decimal based? function is public but restricted to owner only
+                via accesscontrol
+    
+     */
     function setTokenGate(uint256 _tokenGate) public {
         /// Assertion to check only contract owner role is allowed to update gate amount
         require(hasRole(OWNER_ROLE, msg.sender), "Caller does not have permission! uh oh stinky");
@@ -92,6 +127,12 @@ contract SeasonPassController is AccessControl {
     }
 
 
+    /**
+        @notice setter function to update contract address for seasonpass ERC-721 
+        @param  _seasonPassAddress  address var for inputing contract
+        @dev    public function but restricted to owner only role
+    
+     */
     function setSeasonPass(address _seasonPassAddress) public {
         /// Assertion for role
         require(hasRole(OWNER_ROLE, msg.sender), "caller doesn't have permission! naughty!");
@@ -101,7 +142,16 @@ contract SeasonPassController is AccessControl {
     }
 
 
-
+    /**
+        @notice claim() is a public function that is the entry point to the season pass.
+                function will be called by front-end interfaces to issue new seasonpass
+                nft's to token holders/DAO members.
+                it requires the user to hold the tokengate amount of tokens to transact.
+        @dev    this function needs work. metadata will need to come in here if it's generated
+                on front end (ipfs hash passed in a string).
+        
+    
+     */
     function claim() public {
 
         /// Assertion check to ensure sender has token gate amount of tokens and does not hold a season pass (prevent multiples)
@@ -121,12 +171,5 @@ contract SeasonPassController is AccessControl {
 
 
     }
-
-
-
-
-    function verifyTokenGate(address _tokenAddress, address _memberAddress, uint256 _gateAmount) view internal returns (bool) {
-        require(IERC20(_tokenAddress).balanceOf(_memberAddress) >= _gateAmount, "fool! you don't have enough");
-        return true;
-    }
+    
 }

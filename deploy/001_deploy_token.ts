@@ -5,7 +5,7 @@ import 'dotenv/config';
  * @param hre  deploy function receives the hardhat runtime env as a parameter
  */ 
 
-
+// ERC-20 token gate params from .env 
 const TOKEN_CONTRACT_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS;
 const TOKEN_GATE = process.env.TOKEN_GATE;
 
@@ -23,7 +23,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         from: deployer,
         contract: 'SeasonPass',
         args: [],
-        log: true,          // Displays address and gas used in console
+        log: true,   
+        deterministicDeployment: true,       // Displays address and gas used in console
     });
 
 
@@ -32,6 +33,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         contract: 'SeasonPassController',
         args: [deployer, TOKEN_CONTRACT_ADDRESS, TOKEN_GATE],
         log: true,
+        deterministicDeployment: true,
     });
 };
 

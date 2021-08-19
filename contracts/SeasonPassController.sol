@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+import "hardhat/console.sol";
+
 
 /**
 
@@ -46,6 +48,7 @@ interface ERC721 {
 
 interface ISeasonPass {
     function safeMint(address to) external returns (uint);
+    function setTokenMetadata(uint256 tokenId, string memory metadataURI) external;
 }
 
 
@@ -64,7 +67,6 @@ contract SeasonPassController is AccessControl {
     event tokenAddressUpdated(address indexed from, address indexed tokenAddress);
     event tokenGateUpdated(address indexed from, uint256 indexed tokenGate);
     event tokenClaimed(address indexed from, uint256 tokenId, uint256 tokenBalance);
-
 
 
     /// Constructor
@@ -162,14 +164,37 @@ contract SeasonPassController is AccessControl {
         );
         
         uint256 tokenBalance = IERC20(tokenAddress).balanceOf(msg.sender);
+        console.log("msg.sender tokenBalance =", tokenBalance);
 
         /// Call safemint on seasonpass contract, store the tokenId variable
         uint256 tokenId = ISeasonPass(seasonPassAddress).safeMint(msg.sender);
 
         /// Emit event
         emit tokenClaimed(msg.sender, tokenId, tokenBalance);
+        console.log("token claimed for:", tokenId);
 
 
     }
     
+
+    /**
+        @notice function claim is called to revoke a season pass from a member 
+                not meeting token gate requirements.
+                
+                this can be implemented as a token, burn, transfer, or change of metadata.
+                not sure how we want to handle this yet?
+    
+     */
+    function revoke(uint256 tokenId) public {
+
+        require(hasRole(OWNER_ROLE, msg.sender), "caller does not have permission to revoke");
+
+        // we're going to imlement this by changing metadata, for now.
+        string memory metadataURI = "revoked!";
+
+        ISeasonPass(seasonPassAddress).setTokenMetadata(tokenId, metadataURI);
+
+        console.log("token revoked for:", tokenId);
+
+    }
 }

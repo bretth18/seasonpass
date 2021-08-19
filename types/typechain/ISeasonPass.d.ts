@@ -22,11 +22,20 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface ISeasonPassInterface extends ethers.utils.Interface {
   functions: {
     "safeMint(address)": FunctionFragment;
+    "setTokenMetadata(uint256,string)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "safeMint", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "setTokenMetadata",
+    values: [BigNumberish, string]
+  ): string;
 
   decodeFunctionResult(functionFragment: "safeMint", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setTokenMetadata",
+    data: BytesLike
+  ): Result;
 
   events: {};
 }
@@ -79,6 +88,12 @@ export class ISeasonPass extends BaseContract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setTokenMetadata(
+      tokenId: BigNumberish,
+      metadataURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   safeMint(
@@ -86,8 +101,20 @@ export class ISeasonPass extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setTokenMetadata(
+    tokenId: BigNumberish,
+    metadataURI: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     safeMint(to: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    setTokenMetadata(
+      tokenId: BigNumberish,
+      metadataURI: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {};
@@ -97,11 +124,23 @@ export class ISeasonPass extends BaseContract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    setTokenMetadata(
+      tokenId: BigNumberish,
+      metadataURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     safeMint(
       to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTokenMetadata(
+      tokenId: BigNumberish,
+      metadataURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -25,11 +25,10 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
     "OWNER_ROLE()": FunctionFragment;
     "claim()": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
-    "getTokenAddress()": FunctionFragment;
-    "getTokenGate()": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
+    "revoke(uint256)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "seasonPassAddress()": FunctionFragment;
     "setSeasonPass(address)": FunctionFragment;
@@ -54,14 +53,6 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "getTokenAddress",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTokenGate",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "grantRole",
     values: [BytesLike, string]
   ): string;
@@ -72,6 +63,10 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "renounceRole",
     values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revoke",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
@@ -113,20 +108,13 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
     functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTokenAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTokenGate",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "revoke", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "seasonPassAddress",
@@ -225,10 +213,6 @@ export class SeasonPassController extends BaseContract {
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
-    getTokenAddress(overrides?: CallOverrides): Promise<[string]>;
-
-    getTokenGate(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     grantRole(
       role: BytesLike,
       account: string,
@@ -244,6 +228,11 @@ export class SeasonPassController extends BaseContract {
     renounceRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    revoke(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -290,10 +279,6 @@ export class SeasonPassController extends BaseContract {
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-  getTokenAddress(overrides?: CallOverrides): Promise<string>;
-
-  getTokenGate(overrides?: CallOverrides): Promise<BigNumber>;
-
   grantRole(
     role: BytesLike,
     account: string,
@@ -309,6 +294,11 @@ export class SeasonPassController extends BaseContract {
   renounceRole(
     role: BytesLike,
     account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  revoke(
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -353,10 +343,6 @@ export class SeasonPassController extends BaseContract {
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-    getTokenAddress(overrides?: CallOverrides): Promise<string>;
-
-    getTokenGate(overrides?: CallOverrides): Promise<BigNumber>;
-
     grantRole(
       role: BytesLike,
       account: string,
@@ -374,6 +360,8 @@ export class SeasonPassController extends BaseContract {
       account: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    revoke(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     revokeRole(
       role: BytesLike,
@@ -476,10 +464,6 @@ export class SeasonPassController extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTokenGate(overrides?: CallOverrides): Promise<BigNumber>;
-
     grantRole(
       role: BytesLike,
       account: string,
@@ -495,6 +479,11 @@ export class SeasonPassController extends BaseContract {
     renounceRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    revoke(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -547,10 +536,6 @@ export class SeasonPassController extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getTokenAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getTokenGate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     grantRole(
       role: BytesLike,
       account: string,
@@ -566,6 +551,11 @@ export class SeasonPassController extends BaseContract {
     renounceRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    revoke(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+import "hardhat/console.sol";
 
 /**
                                                      
@@ -87,6 +88,7 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
         return currentTokenId;
 
+
     }
 
 
@@ -123,5 +125,12 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
         return super.supportsInterface(interfaceId);
     }
 
+
+    // external function to access updating individual token metadata 
+    // might be useful for metadata based "cancelling" or revoke
+    function setTokenMetadata(uint256 tokenId, string memory metadataURI) external {
+        _setTokenURI(tokenId, metadataURI);
+    }
+    
      
  }

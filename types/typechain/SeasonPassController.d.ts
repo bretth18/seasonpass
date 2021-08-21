@@ -27,6 +27,7 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
+    "hasValidSeasonPass(address)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revoke(uint256)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
@@ -59,6 +60,10 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "hasRole",
     values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasValidSeasonPass",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -111,6 +116,10 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "hasValidSeasonPass",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
@@ -146,16 +155,20 @@ interface SeasonPassControllerInterface extends ethers.utils.Interface {
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
+    "passClaimed(address,uint256,uint256)": EventFragment;
+    "passRevoked(address,uint256)": EventFragment;
+    "seasonPassAddressUpdated(address,address)": EventFragment;
     "tokenAddressUpdated(address,address)": EventFragment;
-    "tokenClaimed(address,uint256,uint256)": EventFragment;
     "tokenGateUpdated(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "passClaimed"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "passRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "seasonPassAddressUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "tokenAddressUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "tokenClaimed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "tokenGateUpdated"): EventFragment;
 }
 
@@ -225,6 +238,11 @@ export class SeasonPassController extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    hasValidSeasonPass(
+      memberAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     renounceRole(
       role: BytesLike,
       account: string,
@@ -291,6 +309,11 @@ export class SeasonPassController extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  hasValidSeasonPass(
+    memberAddress: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   renounceRole(
     role: BytesLike,
     account: string,
@@ -352,6 +375,11 @@ export class SeasonPassController extends BaseContract {
     hasRole(
       role: BytesLike,
       account: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    hasValidSeasonPass(
+      memberAddress: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -424,21 +452,37 @@ export class SeasonPassController extends BaseContract {
       { role: string; account: string; sender: string }
     >;
 
-    tokenAddressUpdated(
-      from?: string | null,
-      tokenAddress?: string | null
-    ): TypedEventFilter<
-      [string, string],
-      { from: string; tokenAddress: string }
-    >;
-
-    tokenClaimed(
+    passClaimed(
       from?: string | null,
       tokenId?: null,
       tokenBalance?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
       { from: string; tokenId: BigNumber; tokenBalance: BigNumber }
+    >;
+
+    passRevoked(
+      from?: string | null,
+      tokenId?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { from: string; tokenId: BigNumber }
+    >;
+
+    seasonPassAddressUpdated(
+      from?: string | null,
+      seasonPassAddress?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { from: string; seasonPassAddress: string }
+    >;
+
+    tokenAddressUpdated(
+      from?: string | null,
+      tokenAddress?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { from: string; tokenAddress: string }
     >;
 
     tokenGateUpdated(
@@ -473,6 +517,11 @@ export class SeasonPassController extends BaseContract {
     hasRole(
       role: BytesLike,
       account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    hasValidSeasonPass(
+      memberAddress: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -545,6 +594,11 @@ export class SeasonPassController extends BaseContract {
     hasRole(
       role: BytesLike,
       account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    hasValidSeasonPass(
+      memberAddress: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

@@ -21,16 +21,22 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface ISeasonPassInterface extends ethers.utils.Interface {
   functions: {
+    "ownerOf(uint256)": FunctionFragment;
     "safeMint(address)": FunctionFragment;
     "setTokenMetadata(uint256,string)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "ownerOf",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "safeMint", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setTokenMetadata",
     values: [BigNumberish, string]
   ): string;
 
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeMint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setTokenMetadata",
@@ -84,6 +90,11 @@ export class ISeasonPass extends BaseContract {
   interface: ISeasonPassInterface;
 
   functions: {
+    ownerOf(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     safeMint(
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -95,6 +106,11 @@ export class ISeasonPass extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  ownerOf(
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   safeMint(
     to: string,
@@ -108,6 +124,8 @@ export class ISeasonPass extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
     safeMint(to: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     setTokenMetadata(
@@ -120,6 +138,11 @@ export class ISeasonPass extends BaseContract {
   filters: {};
 
   estimateGas: {
+    ownerOf(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     safeMint(
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -133,6 +156,11 @@ export class ISeasonPass extends BaseContract {
   };
 
   populateTransaction: {
+    ownerOf(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     safeMint(
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }

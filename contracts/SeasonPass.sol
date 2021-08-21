@@ -34,7 +34,7 @@ import "hardhat/console.sol";
  */
 
 
-contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
+contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     /// Counters library is used for safe enumeration
     using Counters for Counters.Counter;
@@ -58,8 +58,8 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     /// Constructor
 
-    constructor() ERC721("SeasonPass", "SP00"){
-
+    constructor(address _controllerAddress) ERC721("SeasonPass", "SP00"){
+        transferOwnership(_controllerAddress);
     }
 
 
@@ -69,7 +69,7 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
                 and the receiver has implemented onERC721Received.
         @param  to The address of the receipient of the token.
     **/
-    function safeMint(address to) external  returns (uint256) {
+    function safeMint(address to) external onlyOwner returns (uint256) {
 
         uint256 currentTokenId = _tokenIdCounter.current();
 
@@ -91,6 +91,12 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     }
 
+
+    // external function to access updating individual token metadata 
+    // might be useful for metadata based "cancelling" or revoke
+    function setTokenMetadata(uint256 tokenId, string memory metadataURI) external {
+        _setTokenURI(tokenId, metadataURI);
+    }
 
 
 
@@ -125,12 +131,6 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage {
         return super.supportsInterface(interfaceId);
     }
 
-
-    // external function to access updating individual token metadata 
-    // might be useful for metadata based "cancelling" or revoke
-    function setTokenMetadata(uint256 tokenId, string memory metadataURI) external {
-        _setTokenURI(tokenId, metadataURI);
-    }
     
      
  }

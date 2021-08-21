@@ -28,10 +28,27 @@ yarn install
 npx hardhat 
 ```
 
+### deploying contracts
+
+this repository is configured for use with `hardhat-deploy`.
+see the deploy scripts in [./deploy](./deploy) for examples.
+
+to deploy contracts:
+```bash
+npx hardhat --network localhost deploy
+```
+`localhost` deploys to the local hardhat network on your machine.
+
+
+### tests
+
+unit tests are located in [./test](./test)
+tests are written with mocha + chai.
+
 
 
 ## roadmap
-TODO
+todo.
 
 
 

@@ -49,6 +49,7 @@ interface ERC721 {
 interface ISeasonPass {
     function safeMint(address to) external returns (uint);
     function setTokenMetadata(uint256 tokenId, string memory metadataURI) external;
+    function ownerOf(uint256 tokenId) external returns (address owner);
 }
 
 
@@ -66,7 +67,9 @@ contract SeasonPassController is AccessControl {
     /// Events
     event tokenAddressUpdated(address indexed from, address indexed tokenAddress);
     event tokenGateUpdated(address indexed from, uint256 indexed tokenGate);
-    event tokenClaimed(address indexed from, uint256 tokenId, uint256 tokenBalance);
+    event seasonPassAddressUpdated(address indexed from, address indexed seasonPassAddress);
+    event passClaimed(address indexed from, uint256 tokenId, uint256 tokenBalance);
+    event passRevoked(address indexed from, uint256 tokenId);
 
 
     /// Constructor
@@ -87,6 +90,7 @@ contract SeasonPassController is AccessControl {
         /// Set our input params
         tokenAddress = _tokenAddress;
         tokenGate = _tokenGate;
+
     }
 
 
@@ -141,6 +145,8 @@ contract SeasonPassController is AccessControl {
 
         /// Update season pass contract address
         seasonPassAddress = _seasonPassAddress;
+
+        emit seasonPassAddressUpdated(msg.sender, _seasonPassAddress);
     }
 
 
@@ -170,7 +176,7 @@ contract SeasonPassController is AccessControl {
         uint256 tokenId = ISeasonPass(seasonPassAddress).safeMint(msg.sender);
 
         /// Emit event
-        emit tokenClaimed(msg.sender, tokenId, tokenBalance);
+        emit passClaimed(msg.sender, tokenId, tokenBalance);
         console.log("token claimed for:", tokenId);
 
 
@@ -194,7 +200,30 @@ contract SeasonPassController is AccessControl {
 
         ISeasonPass(seasonPassAddress).setTokenMetadata(tokenId, metadataURI);
 
-        console.log("token revoked for:", tokenId);
+        address oldMember = ISeasonPass(seasonPassAddress).ownerOf(tokenId);
 
+
+        console.log("token revoked for:", oldMember, "   token:",  tokenId);
+        emit passRevoked(oldMember, tokenId);
+
+    }
+
+
+    /// public accessible function to see if input address has a valid season pass
+    /// , if it doesn't, we'll  do stuff? (can be modified, right now we just return boolean)
+    function hasValidSeasonPass(address memberAddress) public view returns (bool) {
+
+        if (IERC20(tokenAddress).balanceOf(memberAddress) >= tokenGate &&
+            IERC721(seasonPassAddress).balanceOf(memberAddress) >= 0) {
+
+            console.log("season pass validated for: ", memberAddress);
+            return true;
+
+        } else {
+            console.log("season pass invalid for: ", memberAddress);
+            return false;
+        }
+
+        
     }
 }

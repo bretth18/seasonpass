@@ -1,6 +1,7 @@
-// 001_deploy_token.ts
+// 002_deploy_spcontroller.ts
 
-// Deploy script for TestToken
+// Deploy script for SeasonPassController
+
 
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
@@ -19,26 +20,33 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const { deployments, getNamedAccounts } = hre;
     const { deploy, log } = deployments;
     
+
     // Fetch accounts
     const { deployer, tokenOwner } = await getNamedAccounts();
 
-    // Create a deployment named 'TestToken'. By default it looks for an artifact with the same name
-    const deployTestToken = await deploy('TestToken', {
+
+    // Get our TestToken deployment info to feed into our constructor
+    const TestToken = await deployments.get('TestToken');
+    
+
+    // Create a deployment named 'SeasonPass'. By default it looks for an artifact with the same name
+    const deploySeasonPassController = await deploy('SeasonPassController', {
         from: deployer,
         to: deployer,
-        contract: 'TestToken',
-        args: [],
+        contract: 'SeasonPassController',
+        args: [deployer, TestToken.address, TOKEN_GATE],
         log: true,   
         deterministicDeployment: true,       // Displays address and gas used in console
     });
 
-    if (deployTestToken.newlyDeployed) {
+
+    if (deploySeasonPassController.newlyDeployed) {
         log('\x1b[36m%s\x1b[0m',
             `
-            contract: TestToken deployed at ${deployTestToken.address} 
-            using ${deployTestToken.receipt?.gasUsed} gas. 
-            TestToken Owner: ${deployTestToken.receipt?.to}
-            Signed from    : ${deployTestToken.receipt?.from}
+            contract: SeasonPass deployed at ${deploySeasonPassController.address} 
+            using ${deploySeasonPassController.receipt?.gasUsed} gas. 
+            TestToken Owner: ${deploySeasonPassController.receipt?.to}
+            Signed from    : ${deploySeasonPassController.receipt?.from}
             `
         );
     }
@@ -47,4 +55,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 export default func;
 
-func.tags = ['TestToken'];       // Setup tag for option to execute script on its own
+func.tags = ['SeasonPassController'];   
+func.dependencies = ['TestToken'];  // ensures TestToken is executed/deployed first

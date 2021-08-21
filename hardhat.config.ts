@@ -41,6 +41,9 @@ const networks: NetworksUserConfig = process.env.TEST
       blockNumber: 13046743,
     },
     saveDeployments: true,
+    accounts: {
+      mnemonic: "test test test test test test test test test test test junk"
+    }
   },
 
   rinkeby: {

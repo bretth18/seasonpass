@@ -55,6 +55,11 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         uint256 indexed tokenId
     );
 
+    event SPTokenMetadataChanged(
+        uint256 indexed tokenId,
+        string indexed metadataURI
+    );
+
 
     /// Constructor
 
@@ -96,6 +101,7 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     // might be useful for metadata based "cancelling" or revoke
     function setTokenMetadata(uint256 tokenId, string memory metadataURI) external {
         _setTokenURI(tokenId, metadataURI);
+        emit SPTokenMetadataChanged(tokenId, metadataURI);
     }
 
 

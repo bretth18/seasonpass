@@ -14,7 +14,7 @@ const setup = deployments.createFixture(async () => {
     const {seasonPassOwner} = await getNamedAccounts();
 
     const contracts = {
-        SeasonPass: <IERC721>await ethers.getContractAt('SeasonPass', seasonPassOwner),
+        SeasonPass: <IERC721>await ethers.getContract('SeasonPass', seasonPassOwner),
     };
 
     const users = await setupUsers(await getUnnamedAccounts(), contracts);

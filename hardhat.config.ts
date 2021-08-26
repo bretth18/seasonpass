@@ -2,12 +2,15 @@ import { task } from 'hardhat/config';
 import { HardhatUserConfig, NetworksUserConfig } from 'hardhat/types';
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
+import '@nomiclabs/hardhat-ethers';
 import '@typechain/hardhat';
 import 'hardhat-deploy';
-import 'hardhat-abi-exporter';
+import 'hardhat-deploy-ethers';
 import 'hardhat-gas-reporter';
 import 'hardhat-spdx-license-identifier';
 import 'tsconfig-paths/register';
+import 'hardhat-abi-exporter';
+
 import { accounts } from './utils/accounts';
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -37,7 +40,7 @@ const networks: NetworksUserConfig = process.env.TEST
     loggingEnabled: true,
     forking: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
-      enabled: true,
+      enabled: false,
       blockNumber: 13046743,
     },
     saveDeployments: true,

@@ -170,6 +170,7 @@ interface SeasonPassInterface extends ethers.utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "SPTokenMetadataChanged(uint256,string)": EventFragment;
     "SeasonPassMinted(address,uint256)": EventFragment;
     "SeasonPassRevoked(address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
@@ -178,6 +179,7 @@ interface SeasonPassInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SPTokenMetadataChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SeasonPassMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SeasonPassRevoked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -541,6 +543,14 @@ export class SeasonPass extends BaseContract {
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    SPTokenMetadataChanged(
+      tokenId?: BigNumberish | null,
+      metadataURI?: string | null
+    ): TypedEventFilter<
+      [BigNumber, string],
+      { tokenId: BigNumber; metadataURI: string }
     >;
 
     SeasonPassMinted(

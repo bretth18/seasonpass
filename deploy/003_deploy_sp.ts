@@ -32,7 +32,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     // Create a deployment named 'SeasonPass'. By default it looks for an artifact with the same name
     const deploySeasonPass = await deploy('SeasonPass', {
         from: deployer,
-        to: deployer,
+        to: tokenOwner,
         contract: 'SeasonPass',
         args: [SeasonPassController.address],
         log: true,   

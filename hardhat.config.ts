@@ -58,7 +58,19 @@ const networks: NetworksUserConfig = process.env.TEST
 
 
 const config: HardhatUserConfig = {
-  solidity: '0.8.4',
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.4",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+    ],
+  },
 
 
   networks,

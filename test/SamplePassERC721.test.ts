@@ -3,27 +3,33 @@
 import { ethers, deployments, getUnnamedAccounts, getNamedAccounts } from 'hardhat';
 import { expect } from 'chai';
 
-import {IERC721} from '../types/typechain';
+import {IERC721, SeasonPass as SeasonPassType} from '../types/typechain';
 import { setupUser, setupUsers } from './utils';
 
 
 // Accounts setup
-const setup = deployments.createFixture(async () => {
+const setupTestPass = deployments.createFixture(async () => {
 
     await deployments.fixture('SeasonPass');
-    const {seasonPassOwner} = await getNamedAccounts();
+    const {deployer} = await getNamedAccounts();
 
     const contracts = {
-        SeasonPass: <IERC721>await ethers.getContract('SeasonPass', seasonPassOwner),
+        SeasonPass: <SeasonPassType>await ethers.getContract('SeasonPass', deployer),
     };
 
     const users = await setupUsers(await getUnnamedAccounts(), contracts);
 
+    // testing
+    const deployerConnected = await setupUser(deployer, contracts);
+
+    // mint a pass to account 1
+    await deployerConnected.SeasonPass.safeMint(users[0].address);
+    
 
     return {
         ...contracts,
         users,
-        seasonPassOwner: await setupUser(seasonPassOwner, contracts),
+        seasonPassOwner: await setupUser(deployer, contracts),
     };
 
 });
@@ -32,7 +38,7 @@ const setup = deployments.createFixture(async () => {
 describe('SeasonPass', function() {
 
     it('transfer fails', async function() {
-        const {users} = await setup();
+        const {users} = await setupTestPass();
 
         await expect(
             users[0].SeasonPass.transferFrom(users[0].address, users[1].address, 1)
@@ -41,7 +47,7 @@ describe('SeasonPass', function() {
 
 
     it('successfully transfers', async function() {
-        const {users, seasonPassOwner, SeasonPass} = await setup();
+        const {users, seasonPassOwner, SeasonPass} = await setupTestPass();
 
         await seasonPassOwner.SeasonPass.transferFrom(seasonPassOwner.address, users[1].address, 1);
 

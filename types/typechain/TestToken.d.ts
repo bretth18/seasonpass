@@ -27,7 +27,7 @@ interface TestTokenInterface extends ethers.utils.Interface {
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "mint(address,uint256)": FunctionFragment;
+    "mint(uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -56,10 +56,7 @@ interface TestTokenInterface extends ethers.utils.Interface {
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "mint",
-    values: [string, BigNumberish]
-  ): string;
+  encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -202,7 +199,6 @@ export class TestToken extends BaseContract {
     ): Promise<ContractTransaction>;
 
     mint(
-      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -267,7 +263,6 @@ export class TestToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   mint(
-    to: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -331,11 +326,7 @@ export class TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mint(
-      to: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    mint(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -424,7 +415,6 @@ export class TestToken extends BaseContract {
     ): Promise<BigNumber>;
 
     mint(
-      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -493,7 +483,6 @@ export class TestToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mint(
-      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

@@ -63,8 +63,7 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     /// Constructor
 
-    constructor(address _controllerAddress) ERC721("SeasonPass", "SP00"){
-        transferOwnership(_controllerAddress);
+    constructor() ERC721("SeasonPass", "SP00"){
     }
 
 
@@ -74,7 +73,7 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
                 and the receiver has implemented onERC721Received.
         @param  to The address of the receipient of the token.
     **/
-    function safeMint(address to) external onlyOwner returns (uint256) {
+    function safeMint(address to) external  returns (uint256) {
 
         uint256 currentTokenId = _tokenIdCounter.current();
 
@@ -96,6 +95,10 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     }
 
+    function setController(address controllerAddress) external {
+        transferOwnership(controllerAddress);
+    }
+
 
     // external function to access updating individual token metadata 
     // might be useful for metadata based "cancelling" or revoke
@@ -103,6 +106,7 @@ contract SeasonPass is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         _setTokenURI(tokenId, metadataURI);
         emit SPTokenMetadataChanged(tokenId, metadataURI);
     }
+
 
 
 

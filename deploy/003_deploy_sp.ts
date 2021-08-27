@@ -34,7 +34,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         from: deployer,
         to: tokenOwner,
         contract: 'SeasonPass',
-        args: [SeasonPassController.address],
+        args: [],
         log: true,   
         deterministicDeployment: true,       // Displays address and gas used in console
     });

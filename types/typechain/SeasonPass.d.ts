@@ -32,6 +32,7 @@ interface SeasonPassInterface extends ethers.utils.Interface {
     "safeMint(address)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setController(address)": FunctionFragment;
     "setTokenMetadata(uint256,string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -74,6 +75,10 @@ interface SeasonPassInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setController",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "setTokenMetadata",
@@ -133,6 +138,10 @@ interface SeasonPassInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setController",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -287,6 +296,11 @@ export class SeasonPass extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setController(
+      controllerAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setTokenMetadata(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -386,6 +400,11 @@ export class SeasonPass extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setController(
+    controllerAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setTokenMetadata(
     tokenId: BigNumberish,
     metadataURI: string,
@@ -474,6 +493,11 @@ export class SeasonPass extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setController(
+      controllerAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -638,6 +662,11 @@ export class SeasonPass extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setController(
+      controllerAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setTokenMetadata(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -741,6 +770,11 @@ export class SeasonPass extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setController(
+      controllerAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

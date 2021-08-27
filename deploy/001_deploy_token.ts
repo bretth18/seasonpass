@@ -25,7 +25,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     // Create a deployment named 'TestToken'. By default it looks for an artifact with the same name
     const deployTestToken = await deploy('TestToken', {
         from: deployer,
-        to: deployer,
+        to: tokenOwner,
         contract: 'TestToken',
         args: [],
         log: true,   

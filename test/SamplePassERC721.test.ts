@@ -10,26 +10,26 @@ import { setupUser, setupUsers } from './utils';
 // Accounts setup
 const setupTestPass = deployments.createFixture(async () => {
 
-    await deployments.fixture('SeasonPass');
-    const {deployer} = await getNamedAccounts();
+    await deployments.fixture();
+    const {deployer, tokenOwner} = await getNamedAccounts();
+
 
     const contracts = {
-        SeasonPass: <SeasonPassType>await ethers.getContract('SeasonPass', deployer),
+        SeasonPass: <SeasonPassType>await ethers.getContract('SeasonPass', tokenOwner),
     };
+
+    // mint some tokens
+    await contracts.SeasonPass.safeMint(tokenOwner).then(tx=> tx.wait());
+    
 
     const users = await setupUsers(await getUnnamedAccounts(), contracts);
 
-    // testing
-    const deployerConnected = await setupUser(deployer, contracts);
 
-    // mint a pass to account 1
-    await deployerConnected.SeasonPass.safeMint(users[0].address);
-    
 
     return {
         ...contracts,
         users,
-        seasonPassOwner: await setupUser(deployer, contracts),
+        tokenOwner: await setupUser(tokenOwner, contracts),
     };
 
 });
@@ -42,20 +42,20 @@ describe('SeasonPass', function() {
 
         await expect(
             users[0].SeasonPass.transferFrom(users[0].address, users[1].address, 1)
-        ).to.be.revertedWith('NOT_ENOUGH_TOKENS');
+        ).to.be.revertedWith('ERC721: operator query for nonexistent token');
     });
 
 
     it('successfully transfers', async function() {
-        const {users, seasonPassOwner, SeasonPass} = await setupTestPass();
+        const {users, tokenOwner} = await setupTestPass();
 
-        await seasonPassOwner.SeasonPass.transferFrom(seasonPassOwner.address, users[1].address, 1);
+        await tokenOwner.SeasonPass.transferFrom(tokenOwner.address, users[1].address, 0);
 
         await expect(
-            seasonPassOwner.SeasonPass.transferFrom(seasonPassOwner.address, users[1].address, 1)
+            tokenOwner.SeasonPass.transferFrom(tokenOwner.address, users[1].address, 0)
         )
-            .to.emit(SeasonPass, 'Transfer')
-            .withArgs(seasonPassOwner.address, users[1].address, 1);
+            .to.emit(tokenOwner.SeasonPass, 'Transfer')
+            .withArgs(tokenOwner.address, users[1].address, 1);
     });
 
 });

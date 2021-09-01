@@ -94,7 +94,29 @@ library HexString {
 }
 
 
+/**
 
+    ______   __       __  _______                              
+    /      \ /  \     /  |/       \                             
+    /$$$$$$  |$$  \   /$$ |$$$$$$$  | ______    _______  _______ 
+    $$ | _$$/ $$$  \ /$$$ |$$ |__$$ |/      \  /       |/       |
+    $$ |/    |$$$$  /$$$$ |$$    $$/ $$$$$$  |/$$$$$$$//$$$$$$$/ 
+    $$ |$$$$ |$$ $$ $$/$$ |$$$$$$$/  /    $$ |$$      \$$      \ 
+    $$ \__$$ |$$ |$$$/ $$ |$$ |     /$$$$$$$ | $$$$$$  |$$$$$$  |
+    $$    $$/ $$ | $/  $$ |$$ |     $$    $$ |/     $$//     $$/ 
+    $$$$$$/  $$/      $$/ $$/       $$$$$$$/ $$$$$$$/ $$$$$$$/  
+                                                                
+                                                                
+    -------------------------------------------------------------------------------------------------
+    "GMPass"                :   ERC-721 for saying gm 
+                                
+
+    @author                 :   @ bretth18 / @ computerdata
+    @title                  :   "GMPass"
+
+    @dev                    :   This contract requires you to say GM before minting.
+                      
+ */
 contract GMPass is ERC721Enumerable {
 
     // mapping our GM's
@@ -108,7 +130,7 @@ contract GMPass is ERC721Enumerable {
         _;
     }
 
-    constructor() ERC721("GMPass_v0", "GMGMGM"){
+    constructor() ERC721("GMPass_v1", "GMGMGM"){
     }
 
 
@@ -150,17 +172,17 @@ contract GMPass is ERC721Enumerable {
         // 0: GM said back indicator
         Buffer.append(buffer,'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 600"><g>');
         Buffer.append(buffer, '<text style="cursor: move;font-style:bold;font-weight:bold;" xml:space="preserve" text-anchor="start" font-family="Helvetica" ');
-        Buffer.append(buffer, 'font-size="24" id="svg_2" y="40" x="21" stroke-width="1px" stroke="#000" stroke-linecap="butt" stoke-linejoin="miter" fill="#000000">gms said back :</text>');
+        Buffer.append(buffer, 'font-size="24" id="svg_2" y="40" x="21" stroke-width="1px" stroke="white" stroke-linecap="butt" stoke-linejoin="miter" fill="#000000">gm said back:   </text>');
         Buffer.append(buffer, '<text xml:space="preserve" text-anchor="start" font-family="Helvetica" font-size="24" id="svg_3" y="41" x="180" ');
-        Buffer.append(buffer, 'stroke-width="0" stroke="#000" fill="#000000">');
+        Buffer.append(buffer, 'stroke-width="1px" stroke="white" stroke-linecap="butt" stoke-linejoin="miter" fill="#000000">');
         Buffer.append(buffer, HexString.toString(gmsSaidBack[tokenId]));
         Buffer.append(buffer, '</text>');
 
         // 1: gm 
         Buffer.append(buffer, '<text transform="matrix(2.1102, 0, 0, 2.68, -1069.82, -1177.68)" xml:space="preserve" text-anchor="start" ');
-        Buffer.append(buffer, 'font-family="Helvetica" font-size="100" stroke-width="0" id="svg_1" y="578.61194" x="617.27681" stroke="#000" fill="#');
+        Buffer.append(buffer, 'font-family="Helvetica" font-weight="bold" font-size="100" stroke-width="0" id="svg_1" y="578.61194" x="617.27681" stroke="#000" fill="#');
         Buffer.append(buffer, color);
-        Buffer.append(buffer, '">GM</text></g></svg>');
+        Buffer.append(buffer, '">gm</text></g></svg>');
 
         return Buffer.toString(buffer);
 
@@ -187,6 +209,8 @@ contract GMPass is ERC721Enumerable {
                             '"description":"good morning! say it back please",',
                             '"attributes" : [{"trait_type":"gms said back", "value":',
 
+                            HexString.toString(gmsSaidBack[tokenId]),
+                            '}, {"display_type": "boost_number", "trait_type":"gm power", "value":',
                             HexString.toString(gmsSaidBack[tokenId]),
                             '}],'
                             '"image": "data:image/svg+xml;base64,',

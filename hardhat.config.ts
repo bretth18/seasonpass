@@ -54,6 +54,11 @@ const networks: NetworksUserConfig = process.env.TEST
     accounts: [accounts()],
   },
 
+  ropsten: {
+    url: `https://ropsten.infura.io/v3/${INFURA_KEY}`,
+    accounts: [accounts()],
+  },
+
 };
 
 

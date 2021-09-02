@@ -38,7 +38,7 @@ const setupGMPass = deployments.createFixture(async () => {
 });
 
 
-describe('SeasonPass', function() {
+describe('GMPass', function() {
 
     it('transfer fails', async function() {
         const {users} = await setupGMPass();

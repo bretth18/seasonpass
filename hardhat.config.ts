@@ -26,7 +26,6 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 
 // load .env
-const PRIVATE_KEY = process.env['PRIVATE_KEY'];
 const INFURA_KEY = process.env['INFURA_KEY'];
 const ALCHEMY_KEY = process.env['ALCHEMY_KEY'];
 
@@ -107,6 +106,10 @@ const config: HardhatUserConfig = {
   spdxLicenseIdentifier: {
     overwrite: false,
     runOnCompile: true,
+  },
+
+  gasReporter: {
+    currency: 'USD',
   },
 
 };

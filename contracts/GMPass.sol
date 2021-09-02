@@ -8,7 +8,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
+ 
 import "./utils/base64.sol";
 
 
@@ -119,17 +119,22 @@ library HexString {
  */
 contract GMPass is ERC721Enumerable {
 
-    // mapping our GM's
+    /// mapping our GM's
     mapping (address => uint256) gms;
 
+    /// mapping our gm's said back (gm minted in response to gm)
     mapping (uint => uint) public gmsSaidBack;
 
 
+
+    /// modifier to require signer to say gm to the contract. it's polite and respectful, please say gm. 
     modifier say_gm() {
         require(block.timestamp - gms[msg.sender] <= 1 days, "say gm please");
         _;
     }
 
+
+    /// standard constructor. not doing much here
     constructor() ERC721("GMPass_v1", "GMGMGM"){
     }
 
